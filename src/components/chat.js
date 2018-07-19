@@ -3,7 +3,6 @@ import ChatMessages from './chat_messages';
 import ChatForm from './chat_form';
 import ChatSidebar from './chat_sidebar';
 import openSocket from 'socket.io-client';
-import moment from 'moment';
 const socket = openSocket();
 
 export default class Chat extends Component {
@@ -68,6 +67,10 @@ export default class Chat extends Component {
         });
     }
 
+    userIsTyping() {
+        socket.emit('userTyping');
+    }
+
     shuffleString(str) {
         var shuffledWord = '';
         str = str.split('');
@@ -100,7 +103,6 @@ export default class Chat extends Component {
             <div className="chat">
                 <ChatSidebar
                     users={this.state.users}
-                    room={this.state.room}
                 />
                 <div className="chat__main">
                     <ChatMessages 
@@ -112,6 +114,7 @@ export default class Chat extends Component {
                         sessionId={this.state.sessionId}
                         message={this.state.message}
                         createMessage={this.createMessage}
+                        userIsTyping={this.userIsTyping}
                     />
                 </div>
             </div>

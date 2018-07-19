@@ -5,7 +5,8 @@ export default class ChatForm extends Component {
         super(props);
         this.state = {
             text: '',
-            imageData: {}
+            imageData: {},
+            userIsTyping: false
         };
 
         this.handleTextChange = this.handleTextChange.bind(this);
@@ -19,6 +20,7 @@ export default class ChatForm extends Component {
     }
 
     handleTextChange(event) {
+        this.props.userIsTyping();
         this.setState({
             text: event.target.value
         });

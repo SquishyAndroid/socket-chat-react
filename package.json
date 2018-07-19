@@ -7,25 +7,27 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "start": "node server/server.js",
-    "build": "webpack --config webpack.prod.js",
-    "build-css": "node-sass --include-path scss src/scss/styles.scss public/css/styles.css --output-style compressed",
-    "watch-css": "nodemon -e scss -x \"npm run build-css\""
+    "build": "webpack --config webpack.prod.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "animal-id": "0.0.1",
     "axios": "^0.17.1",
+    "clipboard-copy": "^2.0.0",
     "express": "^4.16.3",
     "moment": "^2.22.2",
-    "nodemon": "^1.18.2",
+    "nanoid": "^1.1.0",
+    "node-url-shortener": "^1.0.1",
+    "nodemon": "^1.18.3",
     "react": "^16.2.0",
-    "react-bootstrap": "^0.31.5",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.3.1",
+    "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1",
-    "styled-components": "^3.3.3"
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -42,6 +44,7 @@
     "jest-cli": "*",
     "node-sass": "^4.9.2",
     "react-addons-test-utils": "^15.1.0",
+    "sass-loader": "^7.0.3",
     "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^1.0.0-beta.1",
     "webpack": "^3.10.0",

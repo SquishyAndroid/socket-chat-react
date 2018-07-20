@@ -5,10 +5,6 @@ import { Link } from 'react-router-dom'
 
 const popoverMenu = (
     <Popover id="popover-trigger-focus" title="Chat Settings">
-        <button type="button" onClick={() => getLinkToShare()}>
-            <i className="fas fa-link"></i> Share this Chatroom
-        </button>
-        <br /><br />
         <button type="button" onClick={() => bookmarkChat()}>
             <i className="fas fa-bookmark"></i> Bookmark Chatroom
         </button>

@@ -8,10 +8,11 @@ const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
-app.use(express.static(path.join(__dirname, '../public'))); // Get public path
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Endpoint for shortening link
-app.get('/v1/utils/shortener', shortenUrl);
+// app.get('/v1/utils/shortener', shortenUrl);
 
 // Handle socket connections
 const io = startSocketConnection(server);

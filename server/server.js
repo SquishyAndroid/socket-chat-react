@@ -10,12 +10,12 @@ const server = http.createServer(app);
 
 app.use(express.static(path.join(__dirname, '../public'))); // Get public path
 
+// Endpoint for shortening link
+app.get('/v1/utils/shortener', shortenUrl);
+
 // Handle socket connections
 const io = startSocketConnection(server);
 handleSockets(io);
-
-// Endpoint for shortening link
-app.get('/v1/test/shortener', shortenUrl);
 
 // Point all routes to index.html to be served by react-router
 app.get('*', (req, res) => {

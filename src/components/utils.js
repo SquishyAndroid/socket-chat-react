@@ -5,7 +5,7 @@ exports.getLinkToShare = () => {
 	let pathName = window.location.pathname;
 	let pathArray = pathName.substring(1).split("/");
 	let [referrer, room] = pathArray;
-	axios.get("/v1/test/shortener", {
+	axios.get("/v1/utils/shortener", {
 		params: { referrer, room }
 	})
 		.then((res) => {

@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
-import { getLinkToShare, bookmarkChat, removeBookmark } from './utils';
-import { Link } from 'react-router-dom'
-
-const popoverMenu = (
-    <Popover id="popover-trigger-focus" title="Chat Settings">
-        <button type="button" onClick={() => bookmarkChat()}>
-            <i className="fas fa-bookmark"></i> Bookmark Chatroom
-        </button>
-        <button type="button" onClick={() => removeBookmark()} className="alert-button">
-            <i className="fas fa-trash-alt"></i> Remove Bookmark
-        </button>
-        <div className="back-button" style={{ marginTop: "40px" }}>
-            <Link to="/" style={{ textDecoration: 'none', color: '#2d9af3'}}>
-                <i className="fa fa-chevron-left" aria-hidden="true"></i> Back to Home
-            </Link>
-        </div>
-    </Popover>
-);
+import { Popover, IPopoverProps, PopoverInteractionKind, Position } from "@blueprintjs/core";
+import ChatSettings from './chat_settings';
 
 export default class ChatSidebar extends Component {
 	render() {
@@ -34,11 +17,14 @@ export default class ChatSidebar extends Component {
 	                </ul>
                 </div>
                 <div className="settings">
-                    <OverlayTrigger trigger="focus" placement="right" overlay={popoverMenu}>
-                        <button type="button" trigger="focus" overlay={popoverMenu}>
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                        </button>
-                    </OverlayTrigger>
+                    <Popover
+                        popoverClassName="settings-popover"
+                        minimal={true}
+                        position={Position.BOTTOM_RIGHT}
+                        content={<ChatSettings />}
+                    >
+                        <button><i className="fa fa-cog" aria-hidden="true"></i></button>
+                    </Popover>
                 </div>
             </div>
         );

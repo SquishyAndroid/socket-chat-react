@@ -16,6 +16,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@blueprintjs/core": "^3.0.1",
     "animal-id": "0.0.1",
     "axios": "^0.18.0",
     "clipboard-copy": "^2.0.0",
@@ -25,7 +26,6 @@
     "node-url-shortener": "^1.0.1",
     "nodemon": "^1.18.3",
     "react": "^16.2.0",
-    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.3.1",

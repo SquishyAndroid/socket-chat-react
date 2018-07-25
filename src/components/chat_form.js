@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import { Intent } from "@blueprintjs/core";
+import { showToast } from './utils';
 
 export default class ChatForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             text: '',
-            imageData: {},
-            userIsTyping: false
+            imageData: {}
         };
 
         this.handleTextChange = this.handleTextChange.bind(this);
@@ -20,15 +21,20 @@ export default class ChatForm extends Component {
     }
 
     handleTextChange(event) {
-        this.props.userIsTyping();
+        this.props.userIsTyping(this.props.name, this.props.room);
         this.setState({
             text: event.target.value
         });
+
+        if (event.target.value === '') {
+            // do something here
+        }
     }
 
     handleFileChange(event) {
         let imageData = this.fileUpload.files[0];
         this.setState({ imageData });
+        showToast("Image successfully uploaded!", Intent.SUCCESS);
     }
 
     isObjectEmpty(obj) {

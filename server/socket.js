@@ -3,6 +3,7 @@ const { generateMessage } = require('./utils/message');
 const { isRealString } = require('./utils/validation');
 const { Users } = require('./utils/users');
 let users = new Users(); // Instantiate user class
+let userIsTyping = false;
 
 exports.startSocketConnection = (server) => {
 	const io = socketIO(server, {
@@ -23,8 +24,8 @@ exports.handleSockets = (io) => {
 			users.addUser(socket.id, params.name, params.room);
 
 			io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-			socket.emit('newMessage', generateMessage('Notice', 'Welcome to the chat app!'));
-			socket.broadcast.to(params.room).emit('newMessage', generateMessage('Notice', `${params.name} has joined`));
+			socket.emit('notification', generateMessage('Notice', 'Welcome to the chat app!'));
+			socket.broadcast.to(params.room).emit('notification', generateMessage('Notice', `${params.name} has joined`));
 			callback();
 		});
 
@@ -38,8 +39,15 @@ exports.handleSockets = (io) => {
 		});
 
 		// User is typing message
-		socket.on('userTyping', () => {
-			console.log('user is typing');
+		socket.on('userTyping', (params) => {
+			userIsTyping = true;
+			let user = users.getUser(socket.id);
+			if (user && userIsTyping) {
+				console.log(params);
+				socket.broadcast.to(params.room).emit('userTypingMessage', {
+					name: params.name
+				});
+			}
 		});
 
 		// Actions to complete on user disconnect
@@ -47,7 +55,7 @@ exports.handleSockets = (io) => {
 			let user = users.removeUser(socket.id);
 			if (user) {
 				io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-				io.to(user.room).emit('newMessage', generateMessage('Notice', `${user.name} has left.`));
+				io.to(user.room).emit('notification', generateMessage('Notice', `${user.name} has left.`));
 			}
 		});
 	});

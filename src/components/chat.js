@@ -3,6 +3,8 @@ import ChatMessages from './chat_messages';
 import ChatForm from './chat_form';
 import ChatSidebar from './chat_sidebar';
 import openSocket from 'socket.io-client';
+import { Intent } from "@blueprintjs/core";
+import { showToast } from './utils';
 const socket = openSocket();
 
 export default class Chat extends Component {
@@ -50,6 +52,14 @@ export default class Chat extends Component {
         socket.on('updateUserList', (users) => {
             this.setState({ users });
         });
+
+        socket.on('notification', (notif) => {
+            showToast(notif.text, Intent.NONE);
+        });
+
+        socket.on('userTypingMessage', (notif) => {
+            console.log(notif);
+        })
     }
 
     componentWillUnmount() {
@@ -67,8 +77,13 @@ export default class Chat extends Component {
         });
     }
 
-    userIsTyping() {
-        socket.emit('userTyping');
+    userIsTyping(name, room) {
+        let params = {
+            name: name,
+            room: room
+        }
+
+        socket.emit('userTyping', params);
     }
 
     shuffleString(str) {
@@ -110,7 +125,9 @@ export default class Chat extends Component {
                         message={this.state.message}
                         messages={this.state.message_list}
                     />
-                    <ChatForm 
+                    <ChatForm
+                        name={this.state.name}
+                        room={this.state.room}
                         sessionId={this.state.sessionId}
                         message={this.state.message}
                         createMessage={this.createMessage}

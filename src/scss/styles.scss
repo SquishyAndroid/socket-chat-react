@@ -131,6 +131,13 @@ button {
     width: 100%;
 }
 
+.side-drawer {
+    position: fixed;
+    z-index: 1;
+    background-color: transparent;
+    color: #a0a0a0;
+}
+
 .chat__sidebar {
     overflow-y: scroll;
     width: 260px;
@@ -243,15 +250,16 @@ button {
     flex-grow: 1;
     overflow-y: scroll;
     list-style-type: none;
-    padding: 10px;
+    padding: 10px 25px 0 35px;
     -webkit-overflow-scrolling: touch;
 }
 
 .message {
     padding: 14px;
+    min-width: 180px;
     width: 70%;
     margin: 15px 0px;
-    border-radius: 2px;
+    border-radius: 10px;
     display: inline-block;
     position: relative;
 
@@ -355,9 +363,5 @@ button {
         & #image {
             margin: 0px;
         }
-    }
-
-    .chat__sidebar {
-        display: none;
     }
 }

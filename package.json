@@ -29,6 +29,8 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.3.1",
+    "react-sidebar": "^2.3.2",
+    "react-touch": "^0.4.4",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1"

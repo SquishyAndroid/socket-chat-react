@@ -5,7 +5,10 @@ import ChatSidebar from './chat_sidebar';
 import openSocket from 'socket.io-client';
 import { Intent } from "@blueprintjs/core";
 import { showToast } from './utils';
+import Sidebar from 'react-sidebar';
+
 const socket = openSocket();
+const mql = window.matchMedia(`(min-width: 800px)`);
 
 export default class Chat extends Component {
     constructor(props) {
@@ -16,15 +19,26 @@ export default class Chat extends Component {
             room: '',
             message: {},
             message_list: [],
-            users: []
+            users: [],
+            mql: mql,
+            docked: props.docked,
+            open: props.open
         }
+
+        this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+        this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+        this.toggleDrawer = this.toggleDrawer.bind(this);
     }
 
     componentDidMount() {
+        mql.addListener(this.mediaQueryChanged);
+
         const { match: { params } } = this.props;
         this.setState({ 
             name: params.name,
-            room: params.room
+            room: params.room,
+            mql: mql,
+            sidebarDocked: mql.matches
         });
 
         socket.on('connect', () => {
@@ -63,10 +77,19 @@ export default class Chat extends Component {
     }
 
     componentWillUnmount() {
+        this.state.mql.removeListener(this.mediaQueryChanged);
         socket.on('disconnect', () => {
             console.log('Disconnected from server');
             scrollToBottom();
         });
+    }
+
+    onSetSidebarOpen() {
+        this.setState({sidebarOpen: open});
+    }
+
+    mediaQueryChanged() {
+        this.setState({sidebarDocked: this.state.mql.matches});
     }
 
     createMessage(text, imageData, sessionId) {
@@ -113,27 +136,59 @@ export default class Chat extends Component {
         last_message.scrollIntoView();
     }
 
+    toggleDrawer() {
+        if (this.state.sidebarDocked) {
+            this.setState({
+                sidebarDocked: false
+            });
+            this.toggle.blur();
+        } else {
+            this.setState({
+                sidebarDocked: true
+            });
+            this.toggle.blur();
+        }
+    }
+
     render() {
+        const sidebarContent = <ChatSidebar users={this.state.users}/>;
+        const sidebarProps = {
+            sidebar: this.state.sidebarOpen,
+            docked: this.state.sidebarDocked,
+            onSetOpen: this.onSetSidebarOpen
+        };
+
         return (
             <div className="chat">
-                <ChatSidebar
-                    users={this.state.users}
-                />
-                <div className="chat__main">
-                    <ChatMessages 
-                        sessionId={this.state.sessionId}
-                        message={this.state.message}
-                        messages={this.state.message_list}
-                    />
-                    <ChatForm
-                        name={this.state.name}
-                        room={this.state.room}
-                        sessionId={this.state.sessionId}
-                        message={this.state.message}
-                        createMessage={this.createMessage}
-                        userIsTyping={this.userIsTyping}
-                    />
-                </div>
+                <Sidebar
+                    sidebar={sidebarContent}
+                    open={this.state.sidebarOpen}
+                    docked={this.state.sidebarDocked}
+                    onSetOpen={this.onSetSidebarOpen}
+                >   
+                    <div className="chat__main">
+                        <button
+                            className="side-drawer"
+                            onClick={this.toggleDrawer}
+                            ref={(toggle) => { this.toggle = toggle; }}
+                        >
+                            <i className="fas fa-bars"></i>
+                        </button>
+                        <ChatMessages 
+                            sessionId={this.state.sessionId}
+                            message={this.state.message}
+                            messages={this.state.message_list}
+                        />
+                        <ChatForm
+                            name={this.state.name}
+                            room={this.state.room}
+                            sessionId={this.state.sessionId}
+                            message={this.state.message}
+                            createMessage={this.createMessage}
+                            userIsTyping={this.userIsTyping}
+                        />
+                    </div>
+                </Sidebar>
             </div>
         );
     }

@@ -255,6 +255,8 @@ button {
 }
 
 .message {
+    border: none;
+    resize: none;
     padding: 14px;
     min-width: 180px;
     width: 70%;
@@ -264,12 +266,13 @@ button {
     position: relative;
 
     &:before {
-        content: "\00a0";
-        display: block;
-        height: 16px;
-        width: 9px;
+        content: ' ';
         position: absolute;
-        bottom: -7px;
+        width: 0;
+        height: 0;
+        right: 0px;
+        bottom: -12px;
+        border: 12px solid;
     }
 
     /* Message Received Styles */
@@ -279,10 +282,10 @@ button {
         box-shadow: 1px 2px 17px 0.5px #dadada;
 
         &.left:before {
-            background-color: #fff;
-            left: 10px;
-            -webkit-transform: rotate(70deg) skew(5deg);
-            transform: rotate(70deg) skew(5deg);
+            left: 0;
+            bottom: -12px;
+            border: 12px solid;
+            border-color: white transparent transparent white;
         }
     }
 
@@ -297,10 +300,9 @@ button {
         }
 
         &.right:before {
-            background-color: $brand-light-blue;
-            right: 10px;
-            -webkit-transform: rotate(118deg) skew(-5deg);
-            transform: rotate(118deg) skew(-5deg);
+            left: auto;
+            border-color: #2d9af3 transparent transparent #2d9af3;
+            transform: scale(-1, 1);
         }
     }
 }

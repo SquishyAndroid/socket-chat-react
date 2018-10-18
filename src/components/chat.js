@@ -6,6 +6,7 @@ import openSocket from 'socket.io-client';
 import { Intent } from "@blueprintjs/core";
 import { showToast } from './utils';
 import Sidebar from 'react-sidebar';
+const Favico = require('favico.js');
 
 const socket = openSocket();
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -20,10 +21,15 @@ export default class Chat extends Component {
             message: {},
             message_list: [],
             users: [],
+            alerts: 0,
             mql: mql,
             docked: props.docked,
             open: props.open
         }
+
+        this.favicon = new Favico({
+            animation: 'none'
+        })
 
         this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
         this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -32,6 +38,11 @@ export default class Chat extends Component {
 
     componentDidMount() {
         mql.addListener(this.mediaQueryChanged);
+
+        window.onfocus = () => { 
+            this.favicon.badge(0);
+            this.setState({ alerts: 0 });
+        }
 
         const { match: { params } } = this.props;
         this.setState({ 
@@ -61,6 +72,7 @@ export default class Chat extends Component {
                 message_list: this.state.message_list.concat(message)
             });
             this.scrollToBottom();
+            this.updateBadgeIcon();
         });
 
         socket.on('updateUserList', (users) => {
@@ -72,8 +84,15 @@ export default class Chat extends Component {
         });
 
         socket.on('userTypingMessage', (notif) => {
-            console.log(notif);
+            // console.log(notif);
         })
+    }
+
+    updateBadgeIcon() {
+        if (this.state.sessionId !== this.state.message.sessionId) {
+            this.state.alerts++;
+            this.favicon.badge(this.state.alerts);
+        }
     }
 
     componentWillUnmount() {

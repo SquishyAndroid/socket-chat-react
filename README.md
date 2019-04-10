@@ -1,5 +1,7 @@
 # React Chat #
 
+[Demo](https://tinymessage.herokuapp.com/)
+
 ### How to compile locally? ###
 
 (terminal)
